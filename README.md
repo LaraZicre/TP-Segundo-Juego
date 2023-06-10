@@ -1,4 +1,4 @@
-# Phaser 3 Template
+# Trabajo práctico - Tilemaps - Programacion 1
 
 Colocar elementos recolectables y un elemento que indique la posición de llegada.
 
