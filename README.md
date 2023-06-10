@@ -1,4 +1,4 @@
-# Trabajo práctico - Tilemaps - Programacion 1
+# Trabajo práctico - Tilemaps - Programación 1
 
 Colocar elementos recolectables y un elemento que indique la posición de llegada.
 
