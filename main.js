@@ -8,14 +8,14 @@ import Fin from "./src/scenes/Fin.js";
 // Create a new Phaser config object
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  width: 768,
+  height: 576,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
     min: {
-      width: 800,
-      height: 600,
+      width: 768,
+      height: 576,
     },
     max: {
       width: 1600,
