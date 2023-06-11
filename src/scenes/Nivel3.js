@@ -4,22 +4,23 @@ export default class Juego extends Phaser.Scene {
   constructor() {
     // key of the scene
     // the key will be used to start the scene by other scenes
-    super("nivel1");
+    super("nivel3");
   }
 
-  init() {
+  init(data) {
     // this is called before the scene is created
     // init variables
     // take data passed from other scenes
     // data object param {}
-    this.nivel = 1;
-    this.cantidadEstrellas = 0;
-    console.log("Prueba !");
+
+    console.log(data);
+    this.nivel = 3;
+    this.cantidadEstrellas = data.cantidadEstrellas || 0;
   }
 
   create() {
     // todo / para hacer: texto de puntaje
-    const map = this.make.tilemap({ key: "map1" });
+    const map = this.make.tilemap({ key: "map3" });
 
     // Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
     // Phaser's cache (i.e. the name you used in preload)
@@ -28,7 +29,12 @@ export default class Juego extends Phaser.Scene {
 
     // Parameters: layer name (or index) from Tiled, tileset, x, y
     const fondoLayer = map.createLayer("fondo", capaFondo, 0, 0);
-    const plataformaLayer = map.createLayer("plataformas", capaPlataformas, 0, 0 );
+    const plataformaLayer = map.createLayer(
+      "plataformas",
+      capaPlataformas,
+      0,
+      0
+    );
     const objectosLayer = map.getObjectLayer("objetos");
 
     plataformaLayer.setCollisionByProperty({ colision: true });
@@ -68,7 +74,12 @@ export default class Juego extends Phaser.Scene {
         case "estrella": {
           // add star to scene
           // console.log("estrella agregada: ", x, y);
-          const star = this.estrellas.create(x, y, "star");
+
+          const star = (this.estrellas.create(
+            x,
+            y,
+            "star"
+          ).body.allowGravity = false);
           break;
         }
       }
@@ -88,7 +99,7 @@ export default class Juego extends Phaser.Scene {
       this.jugador,
       this.salida,
       this.esVencedor,
-      () => this.cantidadEstrellas >= 2, // condicion de ejecucion
+      () => this.cantidadEstrellas >= 6, // condicion de ejecucion
       this
     );
 
@@ -102,6 +113,23 @@ export default class Juego extends Phaser.Scene {
         this.cantidadEstrellas.toString(),
       { fontSize: "15px", fill: "#FFFFFF" }
     );
+
+    // add camara to follow player
+    this.cameras.main.startFollow(this.jugador);
+
+    // world bounds
+    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+    // camara dont go out of the map
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+    // fijar texto para que no se mueva con la camara
+    this.cantidadEstrellasTexto.setScrollFactor(0);
+
+    // add collider to a non phisics group
+    this.physics.add.collider(this.estrellas, this.player, () => {
+      console.log("colision");
+    });
   }
 
   update() {
@@ -150,8 +178,10 @@ export default class Juego extends Phaser.Scene {
 
     console.log("estrellas recolectadas", this.cantidadEstrellas);
 
-    this.scene.start("nivel2", {
+    this.scene.start("fin", {
       cantidadEstrellas: this.cantidadEstrellas,
+      y: "este es un dato de muestra",
+      z: "este es otro atributo enviado a otro escena",
     });
   }
 }
